@@ -1,0 +1,18 @@
+# Playbook pour configurer un serveur apache
+- name: Apache installation 
+  hosts: all
+  remote_user : root
+
+  vars:
+    package_name: "apache2"
+
+
+  tasks:
+    - name: Mettre à jour la liste des paquets
+      apt:
+        update_cache: yes
+
+    - name: Install Apache
+      apt:
+        name: "{{ package_name }}"
+        state: absent
