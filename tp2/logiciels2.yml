@@ -1,0 +1,28 @@
+# Playbook pour configurer un serveur apache
+- name: Apache and mysql-server Installation 
+  hosts: all
+  remote_user : root
+
+  tasks:
+    - name: Mettre à jour la liste des paquets
+      apt:
+        update_cache: yes
+
+    - name: Install logiciels
+      apt:
+        name: "{{ item }}"
+        state: present  
+      loop: 
+        - apache2
+        - mysql-server
+
+    - name: Gather the package facts
+      ansible.builtin.package_facts:
+        manager: auto
+
+    - name: Check if apache is installed
+      ansible.builtin.copy:
+        src: files/index.html
+        dest: /var/www/html/index.html
+        mode: '0644'  
+      when: "'apache2' in ansible_facts.packages"
