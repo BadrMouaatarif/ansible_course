@@ -1,0 +1,26 @@
+- name: 
+  hosts: all
+  remote_user: root
+
+  become: true
+  become_user: root
+
+  tasks:
+    - name: get date day
+      ansible.builtin.debug:
+        var: ansible_date_time
+      tags: debug
+
+    - name: convertir jour en entier
+      ansible.builtin.set_fact:
+        day_number: "{{ ansible_date_time.day | int }}"
+
+    - name: jour pair
+      ansible.builtin.set_fact:
+        jour_pair: "{{ (day_number % 2) == 0 }}"
+        var: jour_pair
+    - name: matin ou aprem
+      ansible.builtin.set_fact:
+        matin: "{{ ansible_date_time.hour | int < 12 }}"
+        var: matin
+
